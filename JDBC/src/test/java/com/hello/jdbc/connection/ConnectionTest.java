@@ -1,5 +1,6 @@
 package com.hello.jdbc.connection;
 
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -32,6 +33,27 @@ public class ConnectionTest {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
         // DB 접속 정보를 한번만 사용해서 DataSource 객체를 만들기 때문에, 커넥션을 사용하는 로직에선 URL, USERNAME, PASSWORD 같은 정보를 신경쓸 필요없다.
         useDataSource(driverManagerDataSource);
+    }
+
+    @Test
+    void dataSourceConnectionaPool() throws SQLException, InterruptedException{
+
+        // HikariCP 를 이용한 커넥션 풀링
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl(URL);
+        dataSource.setUsername(USERNAME);
+        dataSource.setPassword(PASSWORD);
+        dataSource.setMaximumPoolSize(10);
+        dataSource.setPoolName("my pool");
+
+        useDataSource(dataSource);
+
+        /**
+         * 커넥션 풀에 커넥션을 채우는 것은 상대적으로 오래 걸리는 일이다. (TCP/IP 연결 소요)
+         * 애플리케이션을 실행할 때 커넥션 풀을 채울 때 까지 마냥 대기하고 잇다면 애플리케이션 실행 시간이 늦어진다.
+         * 따라서 이렇게 별도의 쓰레드를 사용해서 커넥션 풀을 채워야 애플리케이션 실행 시간에 영향을 주지 않는다.
+        */
+        Thread.sleep(1000);
     }
 
     private void useDataSource(DataSource dataSource) throws SQLException {
