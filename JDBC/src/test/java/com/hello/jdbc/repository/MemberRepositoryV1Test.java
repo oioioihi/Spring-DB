@@ -1,10 +1,10 @@
 package com.hello.jdbc.repository;
 
 import com.hello.jdbc.domain.Member;
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
@@ -19,10 +19,17 @@ class MemberRepositoryV1Test {
 
     @BeforeEach
     void beforeEach() {
-        // 기본 DriverManager사용 - 항상 새로운 커넥션 획득 = 쿼리를 실행할 때마다 DB와 새로운 커넥션을 맺는다.
-        DriverManagerDataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
-        repository = new MemberRepositoryV1(dataSource);
-    }
+
+		// 기본 DriverManager사용 - 항상 새로운 커넥션 획득 = 쿼리를 실행할 때마다 DB와 새로운 커넥션을 맺는다.
+		// DriverManagerDataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
+
+		// HikariCP를 사용한 커넥션 풀링
+		HikariDataSource dataSource = new HikariDataSource();
+		dataSource.setJdbcUrl(URL);
+		dataSource.setUsername(USERNAME);
+		dataSource.setPassword(PASSWORD);
+		repository = new MemberRepositoryV1(dataSource);
+	}
 
     @Test
     void crud() throws SQLException {
