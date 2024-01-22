@@ -55,7 +55,7 @@ class MemberRepositoryV1Test {
         //delete
         repository.delete(member.getMemberId());
         assertThatThrownBy(() -> repository.findById(member.getMemberId())).isInstanceOf(NoSuchElementException.class);
-        //  지정한 예외인지 확인 로직확인 함
+        //  지정한 예외가 맞는지 확인
 
     }
 
