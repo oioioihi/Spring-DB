@@ -2,6 +2,7 @@ package com.hello.jdbc.service;
 
 import com.hello.jdbc.domain.Member;
 import com.hello.jdbc.repository.MemberRepositoryV1;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,13 @@ class MemberServiceV1Test {
         DriverManagerDataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
         memberRepository = new MemberRepositoryV1(dataSource);
         memberService = new MemberServiceV1(memberRepository);
+    }
+
+    @AfterEach
+    void after() throws SQLException {
+        memberRepository.delete(MEMBER_A);
+        memberRepository.delete(MEMBER_B);
+        memberRepository.delete(MEMBER_EX);
     }
 
     @Test
@@ -65,7 +73,6 @@ class MemberServiceV1Test {
         //when
         assertThatThrownBy(() -> memberService.accountTransfer(memberA.getMemberId(), memberEx.getMemberId(), 2000))
                 .isInstanceOf(IllegalStateException.class);
-
 
         //then
         Member findMemberA = memberRepository.findById(memberA.getMemberId());
