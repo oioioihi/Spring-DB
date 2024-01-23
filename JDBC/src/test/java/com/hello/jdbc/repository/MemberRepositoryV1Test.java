@@ -22,8 +22,8 @@ class MemberRepositoryV1Test {
 
 		// 기본 DriverManager사용 - 항상 새로운 커넥션 획득 = 쿼리를 실행할 때마다 DB와 새로운 커넥션을 맺는다.
 		// DriverManagerDataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
-
-		// HikariCP를 사용한 커넥션 풀링
+        // DriverManagerDataSource는 스프링에서 제공하는 DataSource의 구현체
+        // HikariCP를 사용한 커넥션 풀링
 		HikariDataSource dataSource = new HikariDataSource();
 		dataSource.setJdbcUrl(URL);
 		dataSource.setUsername(USERNAME);
