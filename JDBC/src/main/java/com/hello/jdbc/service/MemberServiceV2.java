@@ -37,6 +37,7 @@ public class MemberServiceV2 {
         }
     }
 
+    // 트랜잭션 보장은 되지만 비즈니스로직과 트랜잭션 내용이 함께 섞여있다는 단점이 있다.
     public void accountTransfer(String fromId, String toId, int money) throws SQLException {
 
         Connection con = dataSource.getConnection();
