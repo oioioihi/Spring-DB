@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 /**
  * 트랜잭션 - @Transactional 사용
  *
- * @Transactional를 사용한 테스트를 하려면 spring container에 트랜잭션에 관련된 빈들이 모두 등록되어야 한다.
+ * @Transactional(스프링 AOP)를 사용한 테스트를 하려면 스프링 부트를 통해 spring container에 트랜잭션에 관련된 빈들이 모두 등록되어야 한다.
  */
 @SpringBootTest
 class MemberServiceV3_3Test {
@@ -32,7 +32,7 @@ class MemberServiceV3_3Test {
     public static final String MEMBER_B = "memberB";
     public static final String MEMBER_EX = "ex";
 
-    @Autowired
+    @Autowired //
     private MemberRepositoryV3 memberRepository;
     @Autowired
     private MemberServiceV3_3 memberService;
