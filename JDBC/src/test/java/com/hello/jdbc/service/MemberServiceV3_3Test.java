@@ -2,9 +2,12 @@ package com.hello.jdbc.service;
 
 import com.hello.jdbc.domain.Member;
 import com.hello.jdbc.repository.MemberRepositoryV3;
+import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -25,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  *
  * @Transactional(스프링 AOP)를 사용한 테스트를 하려면 스프링 부트를 통해 spring container에 트랜잭션에 관련된 빈들이 모두 등록되어야 한다.
  */
+@Slf4j
 @SpringBootTest
 class MemberServiceV3_3Test {
 
@@ -32,9 +36,10 @@ class MemberServiceV3_3Test {
     public static final String MEMBER_B = "memberB";
     public static final String MEMBER_EX = "ex";
 
-    @Autowired //
+    @Autowired
     private MemberRepositoryV3 memberRepository;
     @Autowired
+    // memberService에 @Transactional (AOP)를 사용하기 때문에, 실제 spring container에 등록되는 빈은  MemberServiceV3_3를 상속받은 Proxy객체이다.(CGLIB)
     private MemberServiceV3_3 memberService;
 
     @AfterEach
@@ -83,6 +88,15 @@ class MemberServiceV3_3Test {
         Member findMemberB = memberRepository.findById(memberEx.getMemberId());
         assertThat(findMemberA.getMoney()).isEqualTo(10000);
         assertThat(findMemberB.getMoney()).isEqualTo(10000);
+    }
+
+    @Test
+    void AopCheck() {
+        log.info("memberService class={}", memberService.getClass()); //AOP를 사용하기 때문에, 스프링 컨테이너에 해당 클래스의 Proxy빈이 등록됨
+        log.info("memberRepository class={}", memberRepository.getClass());
+        Assertions.assertThat(AopUtils.isAopProxy(memberService)).isTrue();
+        Assertions.assertThat(AopUtils.isAopProxy(memberRepository)).isFalse();
+
     }
 
     @TestConfiguration
