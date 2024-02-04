@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 
 /**
  * Jdbc Template 사용
+ * 개선 점 : JDBC로 개발 할때 발생하는 반복 문제( 커넥션 열고 닫기, 리소스 정리, 파라미터 매핑 등)을 해결
  */
 @Slf4j
 public class MemberRepositoryV5 implements MemberRepository {
