@@ -18,7 +18,7 @@ public class TransactionBasicTest {
 
 
     @Autowired
-    BasicService basicService;
+    BasicService basicService; // Basic를 상속 받은 프록시 객체가 스프링 컨테이너에 빈으로 등록 된다. (다형성을 활용한 같은 타입의 Bean)
 
     @Test
     void proxyCheck() {
@@ -40,7 +40,7 @@ public class TransactionBasicTest {
     @Slf4j
     static class BasicService {
 
-        @Transactional
+        @Transactional // 클래스의 메서드레벨의 어노테이션이 가장 우선 순위가 높다.
         public void transaction() {
             log.info("call transaction");
             boolean isTransactionActive = TransactionSynchronizationManager.isActualTransactionActive();
