@@ -59,7 +59,8 @@ class OrderServiceTest {
         order.setUsername("잔고부족");
 
         // when
-        // 체크예외 발생 시 작업을 롤백하지 않음
+        // 체크예외 발생 시 작업을 롤백하지 않음 -> 시스템에 문제가 발생한 것이 아니라, 비즈니스 문제 상황을 예외를 통해 알려준다.
+        // 런타임 예외는 항상 롤백된다. 체크 예외의 경우 'rollbackFor' 옵션을 사용해서 비즈니스 상황에 따라서 커밋과 롤백을 선택하면 된다.
         try {
             orderService.order(order);
         } catch (NotEnoughMoneyException e) {
