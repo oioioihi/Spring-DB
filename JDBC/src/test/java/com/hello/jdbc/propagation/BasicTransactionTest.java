@@ -80,6 +80,34 @@ public class BasicTransactionTest {
 
     }
 
+    @Test
+    void inner_commit() {
+        log.info("외부 트랜잭션 시작");
+        TransactionStatus outerTransaction = transactionManager.getTransaction(new DefaultTransactionAttribute());
+        log.info("outerTransaction is New ? = {}", outerTransaction.isNewTransaction()); //true
+
+        /**
+         * 내부 트랜잭션이외부 트랜잭션에 참여한다는 뜻은 내부 트랜잭션이 외부 트랜잭션을 그대로 이어 받아서 따른다는 뜻이다.
+         * 외부 트랜잭션과 내부 트랜잭션이 하나의 물리 트랜잭션으로 묶이는 것이다.
+         * 스프링은 여러 트랜잭션이 함께 사용되는 경우, 처음 트랜잭션을 시작한 외부 트랜잭션이 실제 물리 트랜잭션을 관리 하도록 한다.
+         * 이를 통해 트랜잭션 중복 커밋 문제를 해결한다.
+         */
+        innerTransaction();
+
+        log.info("외부 트랜잭션 커밋");
+        transactionManager.commit(outerTransaction);
+
+
+    }
+
+    private void innerTransaction() {
+        log.info("내부 트랜잭션 시작");
+        TransactionStatus innerTransaction = transactionManager.getTransaction(new DefaultTransactionAttribute()); // Participating in existing transaction
+        log.info("innerTransaction is New ? = {}", innerTransaction.isNewTransaction());
+        log.info("내부 트랜잭션 커밋");
+        transactionManager.commit(innerTransaction);
+    }
+
     @TestConfiguration
     static class Config {
 
