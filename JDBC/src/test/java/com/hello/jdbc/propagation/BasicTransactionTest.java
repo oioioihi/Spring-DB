@@ -43,6 +43,43 @@ public class BasicTransactionTest {
          */
     }
 
+    @Test
+    void double_commit() {
+
+        log.info(" 트랜잭션 1 시작 ");
+        TransactionStatus transaction1 = transactionManager.getTransaction(new DefaultTransactionAttribute());
+        log.info("트랜잭션 1 커밋 시작");
+        transactionManager.commit(transaction1);
+
+        log.info(" 트랜잭션 2 시작 ");
+        TransactionStatus transaction2 = transactionManager.getTransaction(new DefaultTransactionAttribute());
+        log.info("트랜잭션 2 커밋 시작");
+        transactionManager.commit(transaction2);
+
+
+        /**
+         - Hikari Connection Pool에서 커넥션을 획득하면 실제 커넥션을 그대로 반환하는 것이 아니라, 내부 관리를 위해 히카리 프록시 커넥션이라는
+         객체를 생성해서 반환한다.
+         - 물론 내부에는 실제 커넥션이 포함되어 있다.
+         - 이 객체의 주소를 확인하면 커넥션 풀에서 획득한 커넥션을 구분할 수 있다.
+         */
+    }
+
+    @Test
+    void double_commit_rollback() {
+
+        log.info(" 트랜잭션 1 시작 ");
+        TransactionStatus transaction1 = transactionManager.getTransaction(new DefaultTransactionAttribute());
+        log.info("트랜잭션 1 커밋 시작");
+        transactionManager.commit(transaction1);
+
+        log.info(" 트랜잭션 2 시작 ");
+        TransactionStatus transaction2 = transactionManager.getTransaction(new DefaultTransactionAttribute());
+        log.info("트랜잭션 2 롤백");
+        transactionManager.rollback(transaction2);
+
+    }
+
     @TestConfiguration
     static class Config {
 
