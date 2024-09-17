@@ -100,6 +100,25 @@ public class BasicTransactionTest {
 
     }
 
+    @Test
+    void outer_rollback() {
+        log.info("외부 트랜잭션 시작");
+        TransactionStatus outerTransaction = transactionManager.getTransaction(new DefaultTransactionAttribute());
+        log.info("outerTransaction is New ? = {}", outerTransaction.isNewTransaction()); //true
+
+        /**
+         * 외부 트랜잭션이 물리 트랜잭션을 시작하고 롤백한다.
+         * 내부 트랜잭션은 물리 트랜잭션에 관여하지 않는다.
+         * 결과적으로 외부 트랜잭션에서 시작한 물리 트랜잭션의 범위가 내부 트랜잭션까지 사용된다.
+         */
+        innerTransaction();
+
+        log.info("외부 트랜잭션 롤백");
+        transactionManager.rollback(outerTransaction);
+
+
+    }
+
     private void innerTransaction() {
         log.info("내부 트랜잭션 시작");
         TransactionStatus innerTransaction = transactionManager.getTransaction(new DefaultTransactionAttribute()); // Participating in existing transaction
