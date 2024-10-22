@@ -162,7 +162,7 @@ public class BasicTransactionTest {
 
         log.info("내부 트랜잭션 시작");
         DefaultTransactionAttribute attribute = new DefaultTransactionAttribute();
-        attribute.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        attribute.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW); // 새로운 DB커넥션을 사용한다.
         TransactionStatus innerTransaction = transactionManager.getTransaction(attribute);
         log.info("inner.isNewTransaction = {}", innerTransaction.isNewTransaction()); //true
 
