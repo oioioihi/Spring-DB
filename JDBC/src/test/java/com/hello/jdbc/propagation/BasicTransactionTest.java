@@ -140,6 +140,7 @@ public class BasicTransactionTest {
          * 외부 트랜잭션이 물리 트랜잭션을 시작하고 롤백한다.
          * 내부 트랜잭션은 물리 트랜잭션에 관여하지 않는다.
          * 결과적으로 외부 트랜잭션에서 시작한 물리 트랜잭션의 범위가 내부 트랜잭션까지 사용된다.
+         * 같은 트랜잭션 동기화 매니저를 사용한다.
          */
         log.info("내부 트랜잭션 시작");
         TransactionStatus innerTransaction = transactionManager.getTransaction(new DefaultTransactionAttribute()); // Participating in existing transaction
@@ -148,6 +149,7 @@ public class BasicTransactionTest {
         transactionManager.rollback(innerTransaction); // Participating transaction failed - marking existing transaction as rollback-only
 
         log.info("외부 트랜잭션 커밋");
+        // 트랜잭션 동기화 매니저를 통해 커넥션을 가져온다.
         // 커밋을 호출했지만, 전체 트랜잭션이 롤백 전용으로 표시되어 있어서 물리 트랜잭션을 롤백한다.
         // Global transaction is marked as rollback-only but transactional code requested commit
         assertThatThrownBy(() -> transactionManager.rollback(outerTransaction)).isInstanceOf(UnexpectedException.class);
