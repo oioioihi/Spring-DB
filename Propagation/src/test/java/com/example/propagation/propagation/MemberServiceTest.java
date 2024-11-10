@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @Slf4j
-@SpringBootTest(classes = {MemberService.class, MemberRepository.class, LogRepository.class})
+@SpringBootTest
 class MemberServiceTest {
 
 
