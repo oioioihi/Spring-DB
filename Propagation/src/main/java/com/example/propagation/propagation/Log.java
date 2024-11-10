@@ -1,4 +1,4 @@
-package com.hello.propagation;
+package com.example.propagation.propagation;
 
 
 import jakarta.persistence.Entity;

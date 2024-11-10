@@ -1,4 +1,4 @@
-package com.hello.propagation;
+package com.example.propagation.propagation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -6,9 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+
 @Slf4j
 @SpringBootTest(classes = {MemberService.class, MemberRepository.class, LogRepository.class})
 class MemberServiceTest {
+
 
     @Autowired
     MemberService memberService;

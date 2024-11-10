@@ -1,7 +1,8 @@
-package com.hello.propagation;
+package com.example.propagation.propagation;
 
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LogRepository {
 
-    private final EntityManager entityManager;
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Transactional
     public void save(Log logMessage) {
